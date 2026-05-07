@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Práctica de Bucles · Taller de Programación 3° 2°</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg:#f2f6f3;--bg2:#e6ede8;--card:#fff;
+  --gr:#166534;--gr2:#14532d;--gr3:#dcfce7;--gr4:#f0fdf4;
+  --dk:#0f2318;--muted:#5a7a62;--border:#c6dbc9;--txt:#0f2318;
+  --am:#b45309;--am2:#78350f;--am3:#fef3c7;--am4:#fffbeb;
+  --bl:#1d4ed8;--bl2:#1e40af;--bl3:#dbeafe;--bl4:#eff6ff;
+  --re:#b91c1c;--re3:#fee2e2;
+  --mo:#7c3aed;--mo3:#ede9fe;
+  --mono:"IBM Plex Mono",monospace;--sans:"Plus Jakarta Sans",sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#0a140d;--bg2:#0f1c12;--card:#0c1810;
+  --gr:#22d3a0;--gr2:#16a87e;--gr3:#062414;--gr4:#041008;
+  --dk:#e8f5ec;--muted:#4a6450;--border:#1a3020;--txt:#d0e8d4;
+  --am:#f0a030;--am2:#d4820a;--am3:#2a1a06;--am4:#1c1208;
+  --bl:#60a5fa;--bl2:#3b82f6;--bl3:#1e3a5f;--bl4:#0f1f40;
+  --re:#fca5a5;--re3:#1f0a0a;
+  --mo:#c4b5fd;--mo3:#2e1065;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--txt);font-size:16px;line-height:1.7;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:300;background:var(--card);border-bottom:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:8px 16px;gap:8px;}
+.tb-brand{font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tb-brand b{color:var(--dk);}
+.tb-acts{display:flex;gap:6px;flex-shrink:0;}
+.tbtn{background:var(--bg2);border:1.5px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:5px 11px;border-radius:20px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.tbtn:hover{border-color:var(--gr);color:var(--gr);}
+
+/* HERO */
+.hero{background:var(--dk);padding:44px 16px 36px;}
+.hero-in{max-width:920px;margin:0 auto;}
+.hero-eye{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.eye-dot{width:6px;height:6px;border-radius:50%;background:var(--gr);box-shadow:0 0 8px var(--gr);animation:pulse 2s ease infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(22px,5vw,40px);font-weight:800;color:#fff;line-height:1.05;margin-bottom:10px;}
+.h-gr{color:#86efac;}
+.hero-desc{color:rgba(255,255,255,.5);font-size:14px;max-width:560px;margin-bottom:20px;}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px;}
+.badge{font-family:var(--mono);font-size:11px;padding:4px 12px;border-radius:12px;}
+.badge-gr{background:rgba(134,239,172,.15);border:1px solid rgba(134,239,172,.35);color:#86efac;}
+.badge-am{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:#fbbf24;}
+.badge-re{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5;}
+
+/* NAV */
+nav{background:var(--card);border-bottom:2px solid var(--border);position:sticky;top:45px;z-index:90;}
+.nav-in{max-width:920px;margin:0 auto;display:flex;overflow-x:auto;padding:0 12px;}
+.nav-in::-webkit-scrollbar{height:0;}
+.nb{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;}
+.nb:hover,.nb.on{color:var(--gr);border-bottom-color:var(--gr);}
+
+/* MAIN */
+main{max-width:920px;margin:0 auto;padding:32px 16px 80px;}
+section{margin-bottom:64px;}
+.s-eye{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gr);margin-bottom:8px;}
+.s-h2{font-size:clamp(18px,3vw,28px);font-weight:800;color:var(--dk);margin-bottom:6px;}
+.divider{height:3px;background:linear-gradient(90deg,var(--gr),transparent);border-radius:2px;margin-bottom:24px;}
+
+/* EJERCICIO HEADER */
+.ej-hdr{border-radius:12px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:flex-start;gap:16px;}
+.ej1{background:var(--gr);}
+.ej2{background:#065f46;}
+.ej-num{font-size:42px;font-weight:900;color:rgba(255,255,255,.25);font-family:var(--mono);line-height:1;flex-shrink:0;}
+.ej-info{flex:1;}
+.ej-tipo{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;}
+.ej-tit{font-size:20px;font-weight:800;color:#fff;margin-bottom:4px;}
+.ej-sub{font-size:13px;color:rgba(255,255,255,.65);}
+
+/* CARD */
+.card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:16px;}
+.card-gr{border-left:4px solid var(--gr);}
+.card-am{border-left:4px solid var(--am);}
+.card-bl{border-left:4px solid var(--bl2);}
+.card-mo{border-left:4px solid var(--mo);}
+
+/* CODE */
+.code{background:#f0f4f1;color:#1a2e22;border-radius:8px;padding:14px 18px;font-family:var(--mono);font-size:13px;line-height:1.95;overflow-x:auto;border:1.5px solid var(--border);white-space:pre;margin:10px 0;}
+[data-theme="dark"] .code{background:#051208;color:#a7f3d0;}
+.cm{color:#5a8a68;font-style:italic;}
+.kw{color:#14532d;font-weight:700;}
+.st{color:#9a3412;}
+.nm{color:#1d4ed8;}
+.fn{color:#6d28d9;}
+[data-theme="dark"] .kw{color:#86efac;}
+[data-theme="dark"] .nm{color:#93c5fd;}
+[data-theme="dark"] .fn{color:#c4b5fd;}
+[data-theme="dark"] .st{color:#fcd34d;}
+[data-theme="dark"] .cm{color:#4a7a5a;}
+
+/* CONSOLA */
+.consola{background:#f0f4f1;color:#1a2e22;border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.9;overflow-x:auto;border:1.5px solid var(--border);margin:10px 0;white-space:pre-wrap;}
+[data-theme="dark"] .consola{background:#051208;color:#a7f3d0;}
+
+/* NOTAS */
+.nota{background:var(--am4);border-left:4px solid var(--am);border-radius:0 8px 8px 0;padding:11px 16px;margin:14px 0;font-size:14px;line-height:1.6;}
+.nota b{color:var(--am2);}
+.tip{background:var(--gr4);border-left:4px solid var(--gr2);border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0;font-size:13px;color:var(--gr2);line-height:1.6;}
+.trap{background:var(--mo3);border-left:4px solid var(--mo);border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0;font-size:13px;color:var(--mo);line-height:1.6;}
+
+/* COMPARATIVA while vs for */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+@media(max-width:600px){.cmp{grid-template-columns:1fr;}}
+.cmp-card{border-radius:10px;padding:16px 18px;border:1.5px solid;}
+.cmp-while{background:var(--gr4);border-color:var(--gr3);}
+.cmp-for{background:var(--bl4);border-color:var(--bl3);}
+.cmp-title{font-family:var(--mono);font-size:13px;font-weight:700;margin-bottom:8px;}
+.cmp-while .cmp-title{color:var(--gr2);}
+.cmp-for .cmp-title{color:var(--bl2);}
+.cmp-card p{font-size:14px;color:var(--muted);}
+.cmp-card li{font-size:14px;color:var(--muted);margin-left:16px;}
+
+/* NIVELES */
+.nivel-card{border-radius:10px;padding:14px 18px;margin-bottom:10px;border:1.5px solid;}
+.nivel-min{background:var(--gr4);border-color:var(--gr3);}
+.nivel-comp{background:var(--am4);border-color:var(--am3);}
+.nivel-bon{background:var(--mo3);border-color:#d8b4fe;}
+.nivel-tag{font-family:var(--mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.nivel-min .nivel-tag{color:var(--gr2);}
+.nivel-comp .nivel-tag{color:var(--am2);}
+.nivel-bon .nivel-tag{color:var(--mo);}
+.nivel-card p{font-size:15px;}
+
+/* REVEAL */
+.reveal-btn{background:var(--bg2);border:1.5px solid var(--border);color:var(--muted);font-family:var(--sans);font-size:13px;font-weight:600;padding:7px 14px;border-radius:7px;cursor:pointer;margin-top:8px;transition:all .2s;}
+.reveal-btn:hover{border-color:var(--gr);color:var(--gr);}
+.sol{display:none;margin-top:10px;background:var(--gr4);border:1.5px solid var(--gr3);border-radius:8px;padding:12px 15px;font-family:var(--mono);font-size:12px;color:var(--gr2);white-space:pre-wrap;line-height:1.8;}
+.sol.show{display:block;}
+
+/* CHECKLIST */
+.chk{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:15px;}
+.chk:last-child{border-bottom:none;}
+.chk input{width:18px;height:18px;margin-top:2px;accent-color:var(--gr);cursor:pointer;flex-shrink:0;}
+
+/* AVISO */
+.aviso{background:var(--card);border:2px solid var(--gr);border-radius:12px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start;margin-top:8px;}
+.aviso-ico{font-size:34px;flex-shrink:0;}
+.aviso h3{font-size:16px;font-weight:700;margin-bottom:6px;}
+.aviso p{font-size:14px;color:var(--muted);line-height:1.6;}
+
+footer{text-align:center;padding:24px;border-top:1.5px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:11px;background:var(--bg2);}
+footer b{color:var(--dk);}
+@media(max-width:640px){h1{font-size:22px;}main{padding:22px 13px 60px;}nav{top:44px;}.nb{font-size:9px;padding:9px 8px;}.code{font-size:11px;}}
+@media(min-width:641px){.hero{padding:52px 24px 42px;}main{padding:40px 24px 100px;}}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-brand">Esc. Industrial N&deg;9 &middot; <b>Taller de Programaci&oacute;n &middot; 3&deg; 2&deg; &middot; 2026</b></div>
+  <div class="tb-acts">
+    <button class="tbtn" id="themeBtn" onclick="toggleTheme()">&#9790; Oscuro</button>
+    <button class="tbtn" onclick="window.print()">&#128424; Imprimir</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="hero-eye"><span class="eye-dot"></span>Taller de Programaci&oacute;n &middot; 3&deg; 2&deg; &middot; Bucles: while y for</div>
+    <h1>Pr&aacute;ctica de <span class="h-gr">Bucles</span></h1>
+    <p class="hero-desc">Dos ejercicios para retomar el ritmo despu&eacute;s del recreo. Uno con <code>while</code>, uno con <code>for</code>. Los dos en VS Code.</p>
+    <div class="hero-meta">
+      <span class="badge badge-gr">while True + break</span>
+      <span class="badge badge-gr">for + range()</span>
+      <span class="badge badge-gr">if / elif / else</span>
+      <span class="badge badge-gr">listas + append()</span>
+      <span class="badge badge-am">VS Code &middot; archivo .py</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-in">
+    <button class="nb on" data-sec="cuando" onclick="ir('cuando')">&#128218; Repa&shy;so</button>
+    <button class="nb" data-sec="ej1" onclick="ir('ej1')">Ejercicio 1 &mdash; while</button>
+    <button class="nb" data-sec="ej2" onclick="ir('ej2')">Ejercicio 2 &mdash; for</button>
+    <button class="nb" data-sec="aviso" onclick="ir('aviso')">&#128075; Termin&eacute;</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══ REPASO RÁPIDO ═══════════════════════════════════════ -->
+<section id="cuando">
+  <div class="s-eye">// Antes de arrancar</div>
+  <h2 class="s-h2">&#128218; Repaso r&aacute;pido: while vs for</h2>
+  <div class="divider"></div>
+
+  <div class="cmp">
+    <div class="cmp-card cmp-while">
+      <div class="cmp-title">&#9854; while &mdash; &quot;hasta que algo pase&quot;</div>
+      <p style="margin-bottom:8px;">Lo us&aacute;s cuando <strong>no sab&eacute;s cu&aacute;ntas veces</strong> va a repetirse el bloque. El loop sigue hasta que una condici&oacute;n cambie.</p>
+      <ul style="margin-left:16px;font-size:14px;color:var(--muted);">
+        <li>Men&uacute; que espera una elecci&oacute;n v&aacute;lida</li>
+        <li>Leer datos hasta que el usuario escriba -1</li>
+        <li>Pedir una contrase&ntilde;a hasta que sea correcta</li>
+      </ul>
+    </div>
+    <div class="cmp-card cmp-for">
+      <div class="cmp-title">&#128260; for &mdash; &quot;exactamente N veces&quot;</div>
+      <p style="margin-bottom:8px;">Lo us&aacute;s cuando <strong>sab&eacute;s de antemano cu&aacute;ntas veces</strong> querés repetir, o cuando recorr&eacute;s una lista.</p>
+      <ul style="margin-left:16px;font-size:14px;color:var(--muted);">
+        <li>Procesar 7 d&iacute;as de datos</li>
+        <li>Recorrer una lista de sensores</li>
+        <li>Repetir 5 veces una operaci&oacute;n</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-am">
+    <p style="font-size:15px;font-weight:700;margin-bottom:10px;">&#128073; La conexi&oacute;n con el men&uacute; que hicieron</p>
+    <p style="font-size:15px;margin-bottom:12px;">El men&uacute; de 8 opciones que programaron usa <code>while True</code> con un <code>break</code> dentro de la opci&oacute;n "Salir". Es exactamente la misma estructura de estos ejercicios:</p>
+    <div class="code"><span class="kw">while</span> <span class="kw">True</span>:               <span class="cm"># loop infinito</span>
+    opcion = <span class="fn">input</span>(<span class="st">"&gt; "</span>)     <span class="cm"># espera algo del usuario</span>
+    <span class="kw">if</span> opcion == <span class="st">"0"</span>:       <span class="cm"># condicion de salida</span>
+        <span class="kw">break</span>              <span class="cm"># break rompe el while</span>
+    <span class="kw">elif</span> opcion == <span class="st">"1"</span>:
+        <span class="fn">print</span>(<span class="st">"Opcion 1"</span>)    <span class="cm"># logica de cada opcion</span></div>
+    <div class="tip" style="margin-top:0;">
+      &#128161; <code>break</code> no "sale del programa" &mdash; sale del bucle. Lo que est&eacute; despu&eacute;s del while sigue ejecut&aacute;ndose.
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EJERCICIO 1 ═════════════════════════════════════════ -->
+<section id="ej1">
+  <div class="ej-hdr ej1">
+    <div class="ej-num">01</div>
+    <div class="ej-info">
+      <div class="ej-tipo">&#9854; Bucle while &middot; Nombre del archivo: guardián.py</div>
+      <div class="ej-tit">El Guardi&aacute;n de la Planta</div>
+      <div class="ej-sub">Un operador monitorea la presi&oacute;n de una c&aacute;ñer&iacute;a en tiempo real. El sistema le responde en cada lectura y lo alerta si hay peligro.</div>
+    </div>
+  </div>
+
+  <!-- SITUACIÓN -->
+  <div class="card card-gr" style="margin-bottom:16px;">
+    <p style="font-size:15px;line-height:1.8;margin-bottom:10px;">
+      Una ca&ntilde;er&iacute;a industrial tiene un sensor de presi&oacute;n. El operador de turno ingresa las lecturas manualmente.
+      El sistema responde en tiempo real: si la presi&oacute;n es normal, lo confirma; si es alta, manda una advertencia; si es cr&iacute;tica, activa la alarma y <strong>cierra el turno autom&aacute;ticamente</strong>.
+      El operador tambi&eacute;n puede escribir <strong>0</strong> para cerrar el turno cuando quiera.
+    </p>
+    <p style="font-size:14px;color:var(--muted);">
+      Al cerrar (por 0 o por presi&oacute;n cr&iacute;tica), el sistema muestra cu&aacute;ntas lecturas se tomaron.
+    </p>
+  </div>
+
+  <!-- CLASIFICACIÓN -->
+  <p style="font-size:15px;font-weight:700;margin-bottom:10px;">Clasificaci&oacute;n de presiones:</p>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:14px;">
+    <thead><tr style="background:var(--gr);color:#fff;">
+      <th style="padding:8px 14px;text-align:left;font-family:var(--mono);font-size:12px;">Rango</th>
+      <th style="padding:8px 14px;text-align:left;font-family:var(--mono);font-size:12px;">Estado</th>
+      <th style="padding:8px 14px;text-align:left;font-family:var(--mono);font-size:12px;">Qu&eacute; hace el sistema</th>
+    </tr></thead>
+    <tbody>
+      <tr style="background:var(--card);"><td style="padding:8px 14px;border-bottom:1px solid var(--border);">0</td><td style="padding:8px 14px;border-bottom:1px solid var(--border);">Se&ntilde;al de salida</td><td style="padding:8px 14px;border-bottom:1px solid var(--border);">Cierra el turno (break)</td></tr>
+      <tr style="background:var(--bg2);"><td style="padding:8px 14px;border-bottom:1px solid var(--border);">1 a 6 bar</td><td style="padding:8px 14px;border-bottom:1px solid var(--border);">&#x1F7E2; NORMAL</td><td style="padding:8px 14px;border-bottom:1px solid var(--border);">Confirma y sigue</td></tr>
+      <tr style="background:var(--card);"><td style="padding:8px 14px;border-bottom:1px solid var(--border);">7 a 9 bar</td><td style="padding:8px 14px;border-bottom:1px solid var(--border);">&#x1F7E1; ALTA</td><td style="padding:8px 14px;border-bottom:1px solid var(--border);">Manda advertencia y sigue</td></tr>
+      <tr style="background:var(--bg2);"><td style="padding:8px 14px;">10 bar o m&aacute;s</td><td style="padding:8px 14px;">&#x1F534; CR&Iacute;TICA</td><td style="padding:8px 14px;">Activa alarma y cierra autom&aacute;ticamente</td></tr>
+    </tbody>
+  </table>
+
+  <!-- SALIDA ESPERADA -->
+  <p style="font-size:15px;font-weight:700;margin-bottom:8px;">Salida esperada en consola:</p>
+  <div class="consola">&#128268; GUARDIAN DE LA PLANTA &#128268;
+Ingresá la presión en bar. Escribí 0 para cerrar el turno.
+=============================================
+
+Lectura #1 | Presión (bar): 4
+&#x1F7E2; NORMAL     | 4 bar. Todo en orden.
+
+Lectura #2 | Presión (bar): 8
+&#x1F7E1; ALTA       | 8 bar. Monitorear. No superar 9 bar.
+
+Lectura #3 | Presión (bar): 5
+&#x1F7E2; NORMAL     | 5 bar. Todo en orden.
+
+Lectura #4 | Presión (bar): 11
+&#x1F534; CRÍTICA    | 11 bar. ALARMA ACTIVADA. Cerrando turno.
+
+=============================================
+Turno cerrado. Lecturas tomadas: 4</div>
+
+  <div class="nota" style="margin-top:4px;">
+    <b>&#9888;&#65039; Ojo:</b> cuando la presión es crítica, el sistema cierra solo &mdash; el operador no escribe 0. 
+    Eso significa que el <code>break</code> puede estar en dos lugares distintos del código.
+  </div>
+
+  <!-- ESQUELETO -->
+  <p style="font-size:15px;font-weight:700;margin:20px 0 8px;">Esqueleto para completar en VS Code:</p>
+  <div class="code"><span class="cm"># guardian.py</span>
+<span class="cm"># -----------------------------------------------</span>
+<span class="cm"># Guardá este archivo y corrélo con: python guardian.py</span>
+
+<span class="fn">print</span>(<span class="st">"&#128268; GUARDIAN DE LA PLANTA &#128268;"</span>)
+<span class="fn">print</span>(<span class="st">"Ingresá la presión en bar. Escribí 0 para cerrar el turno."</span>)
+<span class="fn">print</span>(<span class="st">"=" * <span class="nm">45</span></span>)
+
+contador = <span class="nm">0</span>   <span class="cm"># cuenta cuántas lecturas se tomaron</span>
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    contador += <span class="nm">1</span>
+    <span class="fn">print</span>(<span class="st">f"
+Lectura #{contador} | "</span>, end=<span class="st">""</span>)
+    presion = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Presión (bar): "</span>))
+
+    <span class="kw">if</span> presion == <span class="nm">0</span>:
+        <span class="cm"># completar: mensaje de cierre y break</span>
+        <span class="kw">pass</span>
+
+    <span class="kw">elif</span> <span class="nm">1</span> <= presion <= <span class="nm">6</span>:
+        <span class="cm"># completar: imprimir NORMAL</span>
+        <span class="kw">pass</span>
+
+    <span class="kw">elif</span> <span class="nm">7</span> <= presion <= <span class="nm">9</span>:
+        <span class="cm"># completar: imprimir ALTA</span>
+        <span class="kw">pass</span>
+
+    <span class="kw">else</span>:
+        <span class="cm"># presion >= 10: CRITICA</span>
+        <span class="cm"># completar: imprimir alarma, break</span>
+        <span class="kw">pass</span>
+
+<span class="fn">print</span>(<span class="st">"=" * <span class="nm">45</span></span>)
+<span class="fn">print</span>(<span class="st">f"Turno cerrado. Lecturas tomadas: {contador}"</span>)</div>
+
+  <div class="trap" style="margin-top:4px;">
+    <strong>&#129310; Pregunta antes de arrancar:</strong>
+    &iquest;El <code>contador</code> tiene que estar antes o después del <code>while</code>?
+    &iquest;Y la línea <code>contador += 1</code>?
+    Pensá en qué valor tendría si lo pusieras en el lugar equivocado.
+  </div>
+
+  <!-- NIVELES -->
+  <p style="font-size:15px;font-weight:700;margin:20px 0 10px;">Hasta dónde llego:</p>
+
+  <div class="nivel-card nivel-min">
+    <div class="nivel-tag">&#9989; Mínimo</div>
+    <p>El while corre, clasifica correctamente la presión, el 0 cierra el turno y la presión crítica también lo cierra automáticamente. El contador funciona bien.</p>
+  </div>
+  <div class="nivel-card nivel-comp">
+    <div class="nivel-tag">&#11088; Completo</div>
+    <p>Además del mínimo: al finalizar el turno, el programa muestra cuántas lecturas fueron NORMAL, cuántas ALTA y cuántas CRÍTICA. Usá tres contadores separados.</p>
+  </div>
+  <div class="nivel-card nivel-bon">
+    <div class="nivel-tag">&#128640; Bonus</div>
+    <p>Guardá todas las lecturas en una lista <code>historial</code>. Al cerrar, mostrá la presión máxima del turno sin usar <code>max()</code>: recorré la lista con un <code>for</code> y un acumulador.</p>
+  </div>
+
+  <button class="reveal-btn" onclick="revelar('sol_ej1')">&#128065; Ver solución completa</button>
+  <div class="sol" id="sol_ej1"># guardian.py — SOLUCION COMPLETA (nivel bonus)
+
+print("&#128268; GUARDIAN DE LA PLANTA &#128268;")
+print("Ingresá la presión en bar. Escribí 0 para cerrar el turno.")
+print("=" * 45)
+
+contador  = 0
+normales  = 0
+altas     = 0
+criticas  = 0
+historial = []
+
+while True:
+    contador += 1
+    print(f"
+Lectura #{contador} | ", end="")
+    presion = int(input("Presión (bar): "))
+
+    if presion == 0:
+        contador -= 1  # el 0 no es una lectura real
+        print("Turno cerrado por el operador.")
+        break
+
+    historial.append(presion)
+
+    if 1 <= presion <= 6:
+        normales += 1
+        print(f"&#x1F7E2; NORMAL     | {presion} bar. Todo en orden.")
+    elif 7 <= presion <= 9:
+        altas += 1
+        print(f"&#x1F7E1; ALTA       | {presion} bar. Monitorear. No superar 9 bar.")
+    else:
+        criticas += 1
+        print(f"&#x1F534; CRÍTICA    | {presion} bar. ALARMA ACTIVADA. Cerrando turno.")
+        break
+
+print("=" * 45)
+print(f"Turno cerrado. Lecturas tomadas: {contador}")
+print(f"  Normales : {normales}")
+print(f"  Altas    : {altas}")
+print(f"  Críticas : {criticas}")
+
+# Bonus: máximo sin max()
+if len(historial) > 0:
+    maximo = historial[0]
+    for p in historial:
+        if p > maximo:
+            maximo = p
+    print(f"  Máxima   : {maximo} bar")</div>
+</section>
+
+<!-- ═══ EJERCICIO 2 ═════════════════════════════════════════ -->
+<section id="ej2">
+  <div class="ej-hdr ej2">
+    <div class="ej-num">02</div>
+    <div class="ej-info">
+      <div class="ej-tipo">&#128260; Bucle for &middot; Nombre del archivo: reporte.py</div>
+      <div class="ej-tit">Reporte Semanal de Producción</div>
+      <div class="ej-sub">La planta registró las unidades producidas por día durante una semana. El sistema tiene que analizarlas y generar un informe automático.</div>
+    </div>
+  </div>
+
+  <!-- SITUACIÓN -->
+  <div class="card card-gr" style="margin-bottom:16px;">
+    <p style="font-size:15px;line-height:1.8;margin-bottom:12px;">
+      La línea de producción registró estos datos durante la semana:
+    </p>
+    <div class="code">dias        = [<span class="st">"Lunes"</span>, <span class="st">"Martes"</span>, <span class="st">"Miércoles"</span>, <span class="st">"Jueves"</span>, <span class="st">"Viernes"</span>, <span class="st">"Sábado"</span>, <span class="st">"Domingo"</span>]
+produccion  = [<span class="nm">142</span>, <span class="nm">158</span>, <span class="nm">134</span>, <span class="nm">171</span>, <span class="nm">149</span>, <span class="nm">88</span>, <span class="nm">0</span>]
+META_DIARIA = <span class="nm">150</span>   <span class="cm"># unidades mínimas por día</span></div>
+    <p style="font-size:14px;color:var(--muted);margin-top:10px;">
+      <strong>Domingo = 0</strong> porque la planta no trabaja ese día. El programa tiene que manejarlo correctamente.
+    </p>
+  </div>
+
+  <!-- CONSIGNAS -->
+  <p style="font-size:15px;font-weight:700;margin-bottom:12px;">Consignas &mdash; todo en el mismo archivo <code>reporte.py</code>:</p>
+
+  <div class="card" style="margin-bottom:12px;">
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gr2);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">&#9312; Imprimir el detalle día por día</p>
+    <p style="font-size:15px;margin-bottom:10px;">
+      Con un <code>for</code> que recorra los dos listas a la vez usando <code>range(len())</code>, imprimí en pantalla el nombre del día, las unidades y si se cumplió la meta. Si el día tuvo 0 unidades, imprimir "DIA NO LABORABLE" en lugar del estado.
+    </p>
+    <div class="consola">Lunes     | 142 unidades | &#10007; Por debajo de la meta
+Martes    | 158 unidades | &#10003; Meta cumplida
+Miércoles | 134 unidades | &#10007; Por debajo de la meta
+Jueves    | 171 unidades | &#10003; Meta cumplida
+Viernes   | 149 unidades | &#10007; Por debajo de la meta
+Sábado    |  88 unidades | &#10007; Por debajo de la meta
+Domingo   |   0 unidades | — Día no laborable</div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px;">
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gr2);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">&#9313; Calcular totales con acumuladores</p>
+    <p style="font-size:15px;">
+      Con un <strong>segundo <code>for</code></strong>, calculá sin usar <code>sum()</code>, <code>max()</code> ni <code>min()</code>:
+    </p>
+    <ul style="font-size:15px;margin:10px 0 10px 20px;line-height:2;">
+      <li>Total de unidades producidas en la semana (sin contar el domingo)</li>
+      <li>Promedio de producción de los días laborables</li>
+      <li>Día con mayor producción y su valor</li>
+      <li>Cuántos días se cumplió la meta</li>
+    </ul>
+    <div class="consola">============================
+REPORTE SEMANAL
+Total producido  : 842 unidades
+Promedio diario  : 140.3 unidades
+Día más productivo: Jueves (171 unidades)
+Días sobre la meta: 2 de 6</div>
+  </div>
+
+  <div class="nota">
+    <b>&#9888;&#65039; El domingo es un caso especial.</b> 
+    Para calcular el promedio y el máximo, tenés que saltearlo. 
+    Usá <code>if produccion[i] == 0: continue</code> adentro del for para saltear ese día.
+    <code>continue</code> funciona como un <code>break</code> pero en lugar de salir del loop, pasa directo a la siguiente vuelta.
+  </div>
+
+  <!-- ESQUELETO -->
+  <p style="font-size:15px;font-weight:700;margin:20px 0 8px;">Esqueleto para completar en VS Code:</p>
+  <div class="code"><span class="cm"># reporte.py</span>
+<span class="cm"># -----------------------------------------------</span>
+dias        = [<span class="st">"Lunes"</span>, <span class="st">"Martes"</span>, <span class="st">"Miércoles"</span>, <span class="st">"Jueves"</span>, <span class="st">"Viernes"</span>, <span class="st">"Sábado"</span>, <span class="st">"Domingo"</span>]
+produccion  = [<span class="nm">142</span>, <span class="nm">158</span>, <span class="nm">134</span>, <span class="nm">171</span>, <span class="nm">149</span>, <span class="nm">88</span>, <span class="nm">0</span>]
+META_DIARIA = <span class="nm">150</span>
+
+<span class="cm"># ----- Consigna 1: detalle dia por dia -----</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(dias)):
+    nombre = dias[i]
+    unid   = produccion[i]
+
+    <span class="kw">if</span> unid == <span class="nm">0</span>:
+        estado = <span class="cm"># completar</span>
+    <span class="kw">elif</span> unid >= META_DIARIA:
+        estado = <span class="cm"># completar</span>
+    <span class="kw">else</span>:
+        estado = <span class="cm"># completar</span>
+
+    <span class="fn">print</span>(<span class="st">f"{nombre:<span class="nm">10</span>}| {unid:<span class="nm">3</span>} unidades | {estado}"</span>)
+
+<span class="cm"># ----- Consigna 2: calcular totales -----</span>
+total        = <span class="nm">0</span>
+dias_lab     = <span class="nm">0</span>   <span class="cm"># días laborables (produccion > 0)</span>
+sobre_meta   = <span class="nm">0</span>
+max_prod     = produccion[<span class="nm">0</span>]
+dia_max      = dias[<span class="nm">0</span>]
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(produccion)):
+    <span class="kw">if</span> produccion[i] == <span class="nm">0</span>:
+        <span class="kw">continue</span>   <span class="cm"># saltear domingo</span>
+
+    <span class="cm"># completar: acumular total, dias_lab, sobre_meta, max_prod, dia_max</span>
+    <span class="kw">pass</span>
+
+promedio = total / dias_lab
+
+<span class="fn">print</span>(<span class="st">"=" * <span class="nm">28</span></span>)
+<span class="fn">print</span>(<span class="st">"REPORTE SEMANAL"</span>)
+<span class="fn">print</span>(<span class="st">f"Total producido  : {total} unidades"</span>)
+<span class="fn">print</span>(<span class="st">f"Promedio diario  : {promedio:<span class="nm">.1f</span>} unidades"</span>)
+<span class="fn">print</span>(<span class="st">f"Día más productivo: {dia_max} ({max_prod} unidades)"</span>)
+<span class="fn">print</span>(<span class="st">f"Días sobre la meta: {sobre_meta} de {dias_lab}"</span>)</div>
+
+  <div class="trap" style="margin-top:4px;">
+    <strong>&#129310; Pregunta antes de arrancar:</strong>
+    <code>max_prod = produccion[0]</code> arranca en 142 (Lunes). 
+    &iquest;Qué pasaría si el Lunes hubiera sido el día con mayor producción? 
+    &iquest;Y si el primer elemento fuera 0 (domingo primero)? 
+    &iquest;Hay que cambiar algo?
+  </div>
+
+  <!-- NIVELES -->
+  <p style="font-size:15px;font-weight:700;margin:20px 0 10px;">Hasta dónde llego:</p>
+  <div class="nivel-card nivel-min">
+    <div class="nivel-tag">&#9989; Mínimo</div>
+    <p>El primer <code>for</code> imprime el detalle de los 7 días con el estado correcto, incluyendo el domingo como "Día no laborable".</p>
+  </div>
+  <div class="nivel-card nivel-comp">
+    <div class="nivel-tag">&#11088; Completo</div>
+    <p>El segundo <code>for</code> calcula correctamente los cuatro totales y los imprime en el reporte. El <code>continue</code> saltea el domingo sin romper nada.</p>
+  </div>
+  <div class="nivel-card nivel-bon">
+    <div class="nivel-tag">&#128640; Bonus</div>
+    <p>Agregá al reporte: el día con <strong>menor</strong> producción (sin contar el domingo) y la diferencia entre el día más productivo y el menos productivo. Usá el mismo for, sólo sumá dos variables más.</p>
+  </div>
+
+  <button class="reveal-btn" onclick="revelar('sol_ej2')">&#128065; Ver solución completa</button>
+  <div class="sol" id="sol_ej2"># reporte.py — SOLUCION COMPLETA (nivel bonus)
+
+dias        = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+produccion  = [142, 158, 134, 171, 149, 88, 0]
+META_DIARIA = 150
+
+# Consigna 1: detalle
+for i in range(len(dias)):
+    nombre = dias[i]
+    unid   = produccion[i]
+    if unid == 0:
+        estado = "— Día no laborable"
+    elif unid >= META_DIARIA:
+        estado = "✓ Meta cumplida"
+    else:
+        estado = "✗ Por debajo de la meta"
+    print(f"{nombre:<10}| {unid:>3} unidades | {estado}")
+
+# Consigna 2: totales
+total      = 0
+dias_lab   = 0
+sobre_meta = 0
+max_prod   = 0          # arranca en 0 para no mezclar con el domingo
+dia_max    = ""
+min_prod   = 9999       # valor arbitrariamente alto
+dia_min    = ""
+
+for i in range(len(produccion)):
+    if produccion[i] == 0:
+        continue
+
+    total    += produccion[i]
+    dias_lab += 1
+
+    if produccion[i] >= META_DIARIA:
+        sobre_meta += 1
+
+    if produccion[i] > max_prod:
+        max_prod = produccion[i]
+        dia_max  = dias[i]
+
+    if produccion[i] < min_prod:   # bonus
+        min_prod = produccion[i]
+        dia_min  = dias[i]
+
+promedio = total / dias_lab
+
+print("=" * 28)
+print("REPORTE SEMANAL")
+print(f"Total producido  : {total} unidades")
+print(f"Promedio diario  : {promedio:.1f} unidades")
+print(f"Día más productivo: {dia_max} ({max_prod} unidades)")
+print(f"Días sobre la meta: {sobre_meta} de {dias_lab}")
+
+# Bonus
+print(f"Día menos product.: {dia_min} ({min_prod} unidades)")
+print(f"Diferencia máx-mín : {max_prod - min_prod} unidades")</div>
+</section>
+
+<!-- ═══ AVISO ════════════════════════════════════════════════ -->
+<section id="aviso">
+  <div class="aviso">
+    <div class="aviso-ico">&#128075;</div>
+    <div>
+      <h3>&iquest;Los dos funcionan? Llamá al profe.</h3>
+      <p>
+        Cuando los dos programas corran correctamente en VS Code, llamá al profesor para la revisión.
+        Vas a tener que explicar por qué usaste <code>while</code> en uno y <code>for</code> en el otro.
+      </p>
+    </div>
+  </div>
+
+  <p style="font-size:15px;font-weight:700;margin:20px 0 10px;">Antes de llamar, verificá:</p>
+  <div class="card">
+    <div class="chk"><input type="checkbox" id="c1"><label for="c1"><code>guardian.py</code> &mdash; el 0 cierra el turno y también lo cierra la presión crítica (10+ bar)</label></div>
+    <div class="chk"><input type="checkbox" id="c2"><label for="c2"><code>guardian.py</code> &mdash; el contador no cuenta el 0 como lectura real</label></div>
+    <div class="chk"><input type="checkbox" id="c3"><label for="c3"><code>reporte.py</code> &mdash; el domingo aparece como "Día no laborable" en el detalle</label></div>
+    <div class="chk"><input type="checkbox" id="c4"><label for="c4"><code>reporte.py</code> &mdash; el <code>continue</code> saltea el domingo en el segundo <code>for</code></label></div>
+    <div class="chk"><input type="checkbox" id="c5"><label for="c5">El promedio del reporte da exactamente <strong>140.3</strong></label></div>
+    <div class="chk"><input type="checkbox" id="c6"><label for="c6">Podés explicar en una oración por qué el Ejercicio 1 usa <code>while</code> y el Ejercicio 2 usa <code>for</code></label></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Taller de Programaci&oacute;n &middot; 3&deg; 2&deg; &middot;
+  <b>Escuela Industrial N&deg;9 "15 de Noviembre" &middot; El Calafate</b><br>
+  <b>Prof. Pablo Limardo &middot; Departamento ACPI &middot; Ciclo 2026</b>
+</footer>
+
+<script>
+
+var SECS=['cuando','ej1','ej2','aviso'];
+function ir(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+window.addEventListener('scroll',function(){
+  for(var j=SECS.length-1;j>=0;j--){
+    var el=document.getElementById(SECS[j]);
+    if(el&&el.getBoundingClientRect().top<=110){
+      document.querySelectorAll('.nb').forEach(function(b){
+        b.classList.toggle('on',b.getAttribute('data-sec')===SECS[j]);
+      });break;
+    }
+  }
+});
+function revelar(id){document.getElementById(id).classList.toggle('show');}
+function toggleTheme(){
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  if(dark){document.documentElement.removeAttribute('data-theme');document.getElementById('themeBtn').textContent='\u263a Oscuro';localStorage.setItem('tBucles','light');}
+  else{document.documentElement.setAttribute('data-theme','dark');document.getElementById('themeBtn').textContent='\u2600\ufe0f Claro';localStorage.setItem('tBucles','dark');}
+}
+if(localStorage.getItem('tBucles')==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('themeBtn').textContent='\u2600\ufe0f Claro';}
+
+</script>
+</body>
+</html>
